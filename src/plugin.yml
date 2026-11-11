@@ -1,0 +1,25 @@
+name: SaplingFarm
+version: 2.1.3
+main: net.thex.farm.SaplingFarm
+api-version: '1.21'
+description: Tree farm builder (/tf) - preview with holograms, build on confirm, /tf fell to remove. Respects GriefPrevention claims, tracks farms, takes saplings/torches/dirt from your inventory.
+author: thex
+softdepend: [GriefPrevention]
+commands:
+  treefarm:
+    description: Preview, build, move or remove a tree farm.
+    usage: /tf <type> <W> <L> [spacing] [lit] | /tf confirm|cancel|relocate|fell|help
+    aliases: [tf, saplingfarm, sfarm, farm, farmgrid]
+permissions:
+  treefarm.use:
+    description: Lets a player use tree farm commands.
+    default: true
+  treefarm.admin:
+    description: Remove any tree farm, ignore farm limits.
+    default: op
+  treefarm.farmlimit.unlimited:
+    description: No cap on the number of tree farms.
+    default: false
+  treefarm.farmlimit.*:
+    description: treefarm.farmlimit.<n> sets a player's farm cap to n.
+    default: false

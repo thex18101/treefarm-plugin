@@ -1,0 +1,39 @@
+# Build output
+/out/
+/build/
+/target/
+*.class
+
+# Built plugin jars
+*.jar
+
+# API / dependency jars kept out of the repo
+/lib
+/lib/
+/gpjar
+/gpjar/
+
+# Local secrets and machine-specific files
+*.pass
+*.secret
+*.token
+.env
+/secrets/
+
+# Local deploy / probe / test harnesses (host-specific)
+deploy*.py
+runs_scan.py
+scan_logs.py
+retest.py
+test_tf*.py
+diag_*.py
+leafcheck_remove.py
+leftover*.txt
+*.pid
+
+# Editors / OS
+.idea/
+*.iml
+.vscode/
+*.swp
+.DS_Store

@@ -1,0 +1,34 @@
+# TreeFarm (/tf) settings. Read live, so /reload confirm or a restart applies edits.
+
+# Distance between tree positions. 'max' caps the value players may enter.
+spacing:
+  single-default: 4   # oak/birch/spruce/jungle/acacia/cherry/mangrove/random
+  single-min: 3
+  large-default: 7    # 2x2 trees: jungle_large, spruce_large, dark_oak
+  large-min: 6
+  max: 15
+
+# Torch grid laid through the gaps when 'lit' is used.
+lit:
+  spacing: 4          # one torch roughly every N blocks
+
+# Farm size is measured in TREES.
+limits:
+  min-size: 2         # smallest W or L
+  max-size: 20        # largest W or L
+
+# How many farms a player may have placed at once (raise per player with the
+# permission treefarm.farmlimit.<n>, or treefarm.farmlimit.unlimited).
+farm-limit: 3
+
+# /tf fell: how far away a farm may be to count as "nearest", and how high to
+# clear grown trunks (leaves decay on their own once the trunk is gone).
+fell-range: 100
+fell-height: 48
+
+# A preview lives this long before it expires and cleans itself up.
+confirm-timeout-seconds: 120
+
+preview:
+  use-block-display: true   # floating sapling/torch markers
+  use-particles: true       # glowing border outline
