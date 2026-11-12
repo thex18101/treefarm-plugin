@@ -1,26 +1,41 @@
-# Build output
+# ---- Build output ----
 /out/
 /build/
 /target/
 *.class
 
-# Built plugin jars
+# ---- Built plugin jars ----
 *.jar
 
-# API / dependency jars kept out of the repo
+# ---- API / dependency jars kept out of the repo ----
 /lib
 /lib/
 /gpjar
 /gpjar/
+/libs/
+/libraries/
 
-# Local secrets and machine-specific files
+# ---- Runtime state (lives on the server, never in git) ----
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+farms.yml
+farms.yml.bak*
+
+# ---- Local secrets and machine-specific files ----
 *.pass
 *.secret
 *.token
+*.key
+*.pem
 .env
+.env.*
 /secrets/
+/config.local.yml
 
-# Local deploy / probe / test harnesses (host-specific)
+# ---- Local deploy / probe / test harnesses (host-specific) ----
 deploy*.py
 runs_scan.py
 scan_logs.py
@@ -29,11 +44,19 @@ test_tf*.py
 diag_*.py
 leafcheck_remove.py
 leftover*.txt
+base_restore.txt
 *.pid
 
-# Editors / OS
+# ---- Logs / temp ----
+*.log
+/tmp/
+*.tmp
+
+# ---- Editors / OS ----
 .idea/
 *.iml
 .vscode/
 *.swp
+*~
 .DS_Store
+Thumbs.db

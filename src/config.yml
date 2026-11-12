@@ -21,14 +21,11 @@ limits:
 # permission treefarm.farmlimit.<n>, or treefarm.farmlimit.unlimited).
 farm-limit: 3
 
-# /tf fell: how far away a farm may be to count as "nearest", and how high to
-# clear grown trunks (leaves decay on their own once the trunk is gone).
-fell-range: 100
-fell-height: 48
 
 # A preview lives this long before it expires and cleans itself up.
 confirm-timeout-seconds: 120
 
 preview:
   use-block-display: true   # floating sapling/torch markers
+  max-markers: 120
   use-particles: true       # glowing border outline

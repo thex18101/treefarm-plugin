@@ -2,7 +2,10 @@
 
 A Paper/Spigot plugin that lays out a grid of trees, previews it in the world with holograms and
 particles, builds it only once you confirm (consuming saplings, torches and optional dirt from your
-inventory), and removes it again with a leaf-aware felling pass.
+inventory), and removes it again on command.
+
+Current version: **2.2.0**. See [VERSION-REPORT.txt](VERSION-REPORT.txt) for the tested feature
+matrix and known limitations, and [SECURITY.md](SECURITY.md) for the security and privacy notes.
 
 ## Commands
 
@@ -29,14 +32,14 @@ Aliases: `treefarm`, `tf`, `saplingfarm`, `sfarm`, `farm`, `farmgrid`.
 
 `random` plants whatever saplings you are carrying (dark oak excluded) and has no large option.
 
-### Felling
+### How felling works
 
-Stand inside a farm and run `/tf fell`, then `/tf confirm` within the timeout. The farm's allocated
-plot box is recorded when it is built, and felling clears tree wood inside that box by anchoring on
-leaves: it seeds a flood fill at every log touching a leaf, then removes the connected logs, so trunks
-come down together with their branches. A log that is not connected to any canopy is left alone, which
-preserves a player build placed inside the plot. Torches are returned to your inventory. Leaves are
-left to decay naturally.
+When a farm is built the plugin records the plot bounds, and as the saplings grow it records the
+actual log and leaf blocks they turn into. To remove a farm you stand inside it and run `/tf fell`,
+then `/tf confirm`. The plugin clears exactly the blocks it recorded for that farm, so a player build
+placed inside the plot is left untouched, and the farm's torches are returned to your inventory.
+Removal runs as a chunk-batched job, so large farms clear over successive ticks instead of in one
+spike.
 
 ## Permissions
 
@@ -50,30 +53,25 @@ left to decay naturally.
 ## Configuration
 
 See `src/config.yml`: spacing defaults/minimums, the `lit` torch spacing, size bounds (2..20), the
-per-player farm limit, the fell range/height, the preview timeout, and the block-display / particle
-toggles. Values are read live, so a restart or `/reload confirm` applies edits.
+per-player farm limit, the preview timeout, and the preview marker settings. Values are read live,
+so a restart (or `/reload confirm`) applies edits.
 
 ## Building
 
-The plugin compiles against the Paper API and (optionally) GriefPrevention. Drop the jars in `lib/`:
+`build.sh` compiles against the libraries of a booted Paper server plus the GriefPrevention
+compile-time jar:
 
 ```
-lib/paper-api.jar
-lib/GriefPrevention.jar    # only needed if you want GriefPrevention claim checks
+./build.sh /path/to/paper-server /path/to/GriefPrevention.jar
 ```
 
-Then:
+Output: `build/SaplingFarm-2.2.0.jar`. Copy it into your server's `plugins/` folder.
 
-```
-./build.sh
-```
-
-This compiles `src/` to `out/` and packages `TreeFarm.jar`. Copy that jar into your server's
-`plugins/` folder. GriefPrevention is a soft dependency: without it the plugin still loads and simply
-skips claim checks.
+GriefPrevention is a soft dependency: without it the plugin still loads and simply skips claim checks.
 
 ## Notes
 
-- Farms are tracked in `plugins/SaplingFarm/farms.yml`.
+- Farm records live in `plugins/SaplingFarm/farms.db` (SQLite). An existing `farms.yml` from an
+  older version is imported on first start and left in place.
 - A preview never overlaps an existing farm, even in your own claim or as an admin.
 - Placing or felling requires the ability to build in every affected spot (claims are respected).

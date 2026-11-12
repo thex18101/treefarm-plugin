@@ -1,0 +1,81 @@
+SaplingFarm - Version & Stability Report
+========================================
+
+Version:      2.2.0
+Report date:  2026-11-12
+Plugin main:  net.thex.farm.SaplingFarm
+API target:   Paper 26.3 (api-version '26.3')
+Tested with:  Paper 26.3 (build 249), Java 25, GriefPrevention 16.18.8
+Softdepend:   GriefPrevention (optional; without it claim checks are skipped)
+
+
+BUILD
+-----
+Build with build.sh, pointing it at a booted Paper server's root (for its
+libraries) and the GriefPrevention compile-time jar:
+
+    ./build.sh /path/to/paper-server /path/to/GriefPrevention.jar
+
+Output: build/SaplingFarm-2.2.0.jar
+
+
+WHAT'S IN 2.2.0
+---------------
+- Farm records moved from farms.yml (YAML) into SQLite (plugins/SaplingFarm/
+  farms.db, SQLite ships with Paper). An existing farms.yml is imported on the
+  first successful start and left untouched.
+- Felling runs as a chunk-batched job instead of an inline loop, so large farms
+  are cleared over successive ticks without a single-tick spike.
+- Growth tracking: as planted saplings grow, their store records are swapped
+  for the real log/leaf blocks, so removal targets exactly the farm's wood.
+- Plot bounds are recorded at build time. Removal works from the recorded
+  blocks, which is what protects a player build placed inside the plot.
+
+
+TEST SUMMARY (functional, live on a creative world)
+---------------------------------------------------
+PASS  Load ............... enables cleanly, no errors or warnings; SQLite store
+                           created; existing farms.yml imported.
+PASS  Preview ............ /tf <type> <W> <L> [spacing] [lit] spawns block-
+                           display holograms at every tree and torch position.
+PASS  Cancel ............. /tf cancel removes the preview markers.
+PASS  Build .............. "Built 9 Oak tree(s) (3x3)"; consumed exactly 9 oak
+                           saplings and 4 torches; farm recorded with its plot.
+PASS  Inventory gate ..... confirm with zero saplings is refused; nothing built.
+PASS  Type tokens ........ all 12 preview: oak, spruce, birch, jungle, acacia,
+                           cherry, mangrove, pale_oak, jungle_large,
+                           spruce_large, dark_oak, random.
+PASS  2x2 trees .......... dark_oak 2x2 -> "4 Dark Oak tree(s)", 16 saplings
+                           consumed (4 per tree).
+PASS  Size bounds ........ W=1 and W=25 refused.
+PASS  Spacing bounds ..... spacing 2 and spacing 16 refused.
+PASS  Large min spacing .. jungle_large at spacing 4 (min 6) refused.
+PASS  Bad type ........... 'banana' refused, no preview.
+PASS  Overlap rule ....... previewing inside an existing farm is refused.
+PASS  Relocate ........... /tf relocate re-targets the preview to the player's
+                           new position; it builds there.
+PASS  Fell ............... removes the farm's blocks, deletes the record, and
+                           returns the farm's torches to the player's inventory.
+PASS  Build safety ....... a 5-block player build placed inside the plot
+                           survived a fell intact; only the farm's own blocks
+                           were removed.
+
+
+NOT EXERCISED LIVE
+------------------
+(These need a second account or a land claim, which were not available.)
+- GriefPrevention claim allow/deny paths.
+- An admin removing another player's farm.
+- Tab completion of the command.
+- The per-player farm cap; treefarm.admin (default: op) bypasses it by design,
+  and the cap logic is present in the code.
+
+
+NOTES & LIMITATIONS
+-------------------
+- Runtime state lives in plugins/SaplingFarm/farms.db. Back that file up with
+  your world.
+- Imported/legacy farms (migrated from the old YAML) are handled differently:
+  felling one releases its farm slot but deliberately leaves its blocks in the
+  world, because their ownership cannot be verified.
+- Settings are read live; a restart (or /reload confirm) applies config edits.

@@ -1,0 +1,35 @@
+SaplingFarm 2.2.0
+
+Install
+Stop the server, replace the old SaplingFarm JAR in plugins/, and start Paper.
+Keep the existing plugins/SaplingFarm directory. SQLite ships with Paper.
+GriefPrevention is optional at runtime. The tested versions are Paper 26.3
+build 249, Java 25 and GriefPrevention 16.18.8.
+
+Build
+Run the included Bash script from a machine with JDK 25 on PATH. Point it at a
+Paper 26.3 server directory whose libraries have been unpacked and at the
+GriefPrevention JAR used for compilation.
+  ./build.sh /path/to/paper-server /path/to/GriefPrevention.jar
+The result is build/SaplingFarm-2.2.0.jar.
+
+Existing farms
+The first successful startup imports the plot owners and planting bounds from
+farms.yml into farms.db. It leaves the original YAML untouched. Removing an
+imported plot releases its farm slot and keeps all its old blocks, including
+torches. New plots have exact ownership records.
+
+Ownership
+Only saplings planted by the plugin and their observed growth qualify for tree
+cleanup. Manually replanted trees stay with the player. Cleanup also returns
+remaining tracked torches. Dirt used to prepare a plot stays as terrain.
+Deletion is processed in batches. If the player disconnects, changes world,
+or a claim blocks progress, the remaining records can be resumed with /tf fell.
+For a consistent backup or rollback, keep the world and plugin database together
+while the server is stopped.
+
+Other editors
+Bulk editors or scripts that replace blocks directly can call
+SaplingFarm.forgetEditedBlocks(Collection<Block>) on the main server thread
+immediately before applying their edits. An identical replacement made without
+a block event or this hook cannot be distinguished from the original.

@@ -2,15 +2,16 @@ package net.thex.farm;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-/** Abstraction over a land-claim plugin (GriefPrevention). A no-op guard is used when none is installed. */
+/**
+ * Abstraction over a land-claim plugin (GriefPrevention). A no-op guard is used when none is
+ * installed.
+ */
 public interface ClaimGuard {
 
-    /** True if the player could build at this location (wilderness or a claim they may build in). */
+    /**
+     * True if the player could build at this location (wilderness or a claim they may build in).
+     */
     boolean canBuild(Player player, Location loc, Material mat);
-
-    /** True if claims are active in this world (so checks are meaningful). Default: no claims plugin. */
-    default boolean claimsActive(World world) { return false; }
 }

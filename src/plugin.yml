@@ -1,7 +1,7 @@
 name: SaplingFarm
-version: 2.1.3
+version: 2.2.0
 main: net.thex.farm.SaplingFarm
-api-version: '1.21'
+api-version: '26.3'
 description: Tree farm builder (/tf) - preview with holograms, build on confirm, /tf fell to remove. Respects GriefPrevention claims, tracks farms, takes saplings/torches/dirt from your inventory.
 author: thex
 softdepend: [GriefPrevention]
